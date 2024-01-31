@@ -6,7 +6,7 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:31:58 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/17 05:53:10 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/17 06:00:56 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ void	*monitor(void *arg)
 				philos->data->die = 1;
 				break ;
 			}
-			// if (philos->data->max_eat != -1 && (philos + i)->count_eat >= philos->data->max_eat)
-			// 	philos->data->die = 1;
+			if (philos->data->max_eat != -1 && (philos + i)->count_eat >= philos->data->max_eat)
+				philos->data->die = 1;
 		}
 	}
 	return (0);
