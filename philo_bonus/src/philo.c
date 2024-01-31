@@ -6,30 +6,22 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:31:58 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/22 19:33:22 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/26 18:01:44 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	clear_mutex(t_data *data)
+void	free_and_destroy(t_philo *philos, int flag)
 {
-	int	i;
-
-	i = -1;
-	while (++i < data->nb_philos)
-		pthread_join(data->thread[i], NULL);
-	i = -1;
-	pthread_mutex_destroy(&data->mutex_p);
-	pthread_mutex_destroy(&data->mutex_stop);
-	while (++i < data->nb_forks)
-		pthread_mutex_destroy(&data->mutex[i]);
-	i = -1;
-	while (++i < data->nb_philos)
-		free(data->philos[i]);
-	free(data->mutex);
-	free(data->thread);
-	free(data->philos);
+	free(philos->data->pid);
+	free(philos->data->philos);
+	sem_destroy(philos->sem_eat);
+	sem_destroy(philos->data->sem_fork);
+	sem_destroy(philos->data->sem_print);
+	if (flag)
+		exit(1);
+	exit(0);
 }
 
 int	create_thread_even(t_data *data)

@@ -6,31 +6,39 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 16:45:01 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/23 00:25:21 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/26 18:54:17 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-// int	init_mutex(t_data *data)
-// {
-// 	int	i;
+char	*ft_strjoin(char *s1, char *s2)
+{	
+	int		i;
+	int		j;
+	char	*res;
 
-// 	data->mutex = malloc(sizeof(pthread_mutex_t) * data->nb_forks);
-// 	if (!data->mutex)
-// 		return (1);
-// 	i = -1;
-// 	while (++i < data->nb_forks)
-// 	{
-// 		if (pthread_mutex_init(&data->mutex[i], NULL))
-// 			return (1);
-// 	}
-// 	if (pthread_mutex_init(&data->mutex_p, NULL))
-// 		return (1);
-// 	if (pthread_mutex_init(&data->mutex_stop, NULL))
-// 		return (1);
-// 	return (0);
-// }
+	if (!s1 || !s2)
+		return (NULL);
+	res = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!res)
+		return (NULL);
+	i = 0;
+	while (s1[i])
+	{
+		res[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (s2[j])
+	{
+		res[i] = s2[j];
+		i++;
+		j++;
+	}
+	res[i] = '\0';
+	return (res);
+}
 
 void	philo_param(t_data *data, t_philo *philos, int flag)
 {
@@ -39,24 +47,29 @@ void	philo_param(t_data *data, t_philo *philos, int flag)
 	philos->flag = flag;
 	philos->data = data;
 	philos->nb_locked_forks = 0;
-	philos->mutex_eat = sem_open("/mutex_eat", O_CREAT, 0644, 1);
 }
 
 int	create_philo(t_data *data, int i, int flag)
 {
-	pthread_t	thread;
-	t_philo		*philos;
+	int			pid;
+	char		*name;
+	t_philo		philos;
 
-	philos = malloc(sizeof(t_philo));
-	if (!philos)
+	philos.id = i;
+	name = ft_strjoin("/sem_eat", ft_itoa(i));
+	philo_param(data, &philos, flag);
+	philos.sem_eat = sem_open(name, O_CREAT, 0644, 1);
+	pid = fork();
+	if (pid == -1)
 		return (1);
-	philos->id = i;
-	philo_param(data, philos, flag);
-	if (pthread_mutex_init(&philos->mutex_eat, NULL))
-		return (1);
-	pthread_create(&thread, NULL, &routine, philos);
-	data->thread[i] = thread;
-	data->philos[i] = philos;
+	if (pid == 0)
+		routine(&philos);
+	else
+	{
+		data->pid[i] = pid;
+		data->philos[i] = philos.sem_eat;
+		return (0);
+	}
 	return (0);
 }
 
@@ -74,11 +87,10 @@ int	init_data(t_data *data, int argc, char **argv)
 	if (data->nb_philos == -1 || data->time_to_die == -1 || data->time_to_eat
 		== -1 || data->time_to_sleep == -1)
 		return (1);
-	data->thread = malloc(sizeof(pthread_t) * data->nb_philos);
+	data->pid = malloc(sizeof(pthread_t) * data->nb_philos);
 	data->philos = malloc(sizeof(t_philo *) * data->nb_philos);
-	if (!data->thread || !data->philos)
+	if (!data->pid || !data->philos)
 		return (1);
-	data->stop = 0;
 	return (0);
 }
 
@@ -86,14 +98,13 @@ int	init(t_data *data, int argc, char **argv)
 {
 	if (init_data(data, argc, argv) == -1)
 		return (1);
-	if (init_mutex(data))
-		return (1);
+	sem_open("/sem_fork", O_CREAT, 0644, data->nb_forks);
+	sem_open("/sem_print", O_CREAT, 0644, 1);
 	data->start = get_cur_time();
 	if (create_thread_even(data))
 		return (1);
 	if (create_thread_odd(data))
 		return (1);
-	monitor(data);
-	clear_mutex(data);
+	//clear(data);
 	return (0);
 }

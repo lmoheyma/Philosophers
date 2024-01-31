@@ -9,7 +9,8 @@ SRCS = src/philo.c \
 		src/utils.c \
 		src/routine.c \
 		src/monitor.c \
-		src/check_args.c
+		src/check_args.c \
+		src/ft_itoa.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -23,7 +24,7 @@ bonus: $(NAME)
 	$(CC) $(FLAGS) $(INCLUDE) -c $< -o $@
 
 $(NAME) : $(OBJS)
-	$(CC) $(FLAGS) $(OBJS) -o $(NAME) $(INCLUDE)
+	$(CC) $(FLAGS) $(INCLUDE) $(OBJS) -o $(NAME)
 
 clean:
 	rm -f $(OBJS)
