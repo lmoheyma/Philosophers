@@ -37,7 +37,7 @@ void	*monitor(void *arg)
 	while (1)
 	{
 		sem_wait(philos->sem_eat);
-		//is_dead(philos);
+		is_dead(philos);
 		if (philos->data->max_eat != -1
 			&& philos->count_eat >= philos->data->max_eat)
 		{
@@ -52,6 +52,6 @@ void	*monitor(void *arg)
 			free_and_destroy(philos, 0);
 		}
 		sem_post(philos->sem_eat);
-		usleep(3000);
+		usleep(1000);
 	}
 }

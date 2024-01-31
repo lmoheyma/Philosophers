@@ -6,7 +6,7 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 16:45:01 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/26 20:02:27 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/26 20:30:43 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,16 @@ void	philo_param(t_data *data, t_philo *philos, int flag)
 int	create_philo(t_data *data, int i, int flag)
 {
 	int			pid;
-	char		*name;
 	t_philo		philos;
 
 	philos.id = i;
-	name = ft_strjoin("/sem_eat", ft_itoa(i));
 	philo_param(data, &philos, flag);
-	philos.sem_eat = sem_open(name, O_CREAT, 0644, 1);
+	philos.sem_eat = sem_open(ft_strjoin("/sem_eat", ft_itoa(i)), O_CREAT, 0644, 1);
 	pid = fork();
 	if (pid == -1)
 		return (1);
 	if (pid == 0)
-	{
 		routine(&philos);
-	}
 	else
 	{
 		data->pid[i] = pid;
@@ -118,14 +114,16 @@ void exit_philo(t_data *data)
 		sem_close(data->philos[i]);
 	sem_close(data->sem_fork);
 	sem_close(data->sem_print);
+	free(data->pid);
+	free(data->philos);
 }
 
 int	init(t_data *data, int argc, char **argv)
 {
 	if (init_data(data, argc, argv) == -1)
 		return (1);
-	sem_open("/sem_fork", O_CREAT, 0644, data->nb_forks);
-	sem_open("/sem_print", O_CREAT, 0644, 1);
+	data->sem_fork = sem_open("/sem_fork", O_CREAT, 0644, data->nb_forks);
+	data->sem_print = sem_open("/sem_print", O_CREAT, 0644, 1);
 	data->start = get_cur_time();
 	if (create_thread_even(data))
 		return (1);
