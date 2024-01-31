@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:31:12 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/18 20:37:23 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/19 02:05:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_data
 	int				max_eat;
 	int				nb_forks;
 	int				die;
+	int				stop;
 	pthread_t		monitor;
 	pthread_mutex_t	*mutex;
 	pthread_mutex_t	mutex_p;
@@ -42,8 +43,8 @@ typedef struct s_philo
 	int				count_eat;
 	long int		last_meal;
 	pthread_t		thread_p;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
+	int				left_fork;
+	int				right_fork;
 	t_data			*data;
 }					t_philo;
 

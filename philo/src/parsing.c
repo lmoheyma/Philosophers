@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 14:58:20 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/18 21:21:56 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/19 02:54:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,10 @@ int	init_mutex(t_data *data)
 		if (pthread_mutex_init(data->mutex + i, NULL))
 			return (1);
 	}
+	if (pthread_mutex_init(&data->mutex_d, NULL))
+		return (1);
+	if (pthread_mutex_init(&data->mutex_p, NULL))
+		return (1);
 	return (0);
 }
 
@@ -59,16 +63,8 @@ void	init_philo(t_data *data, t_philo *philos, int i, pthread_mutex_t *fork)
 	philos->count_eat = 0;
 	philos->last_meal = 0;
 	philos->data = data;
-	if (i == 0)
-	{
-		philos->left_fork = fork + data->nb_forks - 1;
-		philos->right_fork = fork + i;
-	}
-	else
-	{
-		philos->left_fork = fork + i - 1;
-		philos->right_fork = fork + i;
-	}
+	philos->left_fork = i;
+	philos->right_fork = (i + 1) % data->nb_philos;
 }
 
 int	init_data(t_data **data, int argc, char **argv)
@@ -90,9 +86,8 @@ int	init_data(t_data **data, int argc, char **argv)
 	if (data_tmp->nb_philos == -1 || data_tmp->time_to_die == -1
 		|| data_tmp->time_to_eat == -1 || data_tmp->time_to_sleep == -1)
 		return (1);
-	//pthread_mutex_lock(&data_tmp->mutex_d);
 	data_tmp->die = 0;
-	//pthread_mutex_unlock(&data_tmp->mutex_d);
+	data_tmp->stop = 0;
 	*data = data_tmp;
 	return (0);
 }
@@ -107,10 +102,6 @@ int	init(t_philo **philos, int argc, char **argv)
 		return (1);
 	i = -1;
 	if (init_data(&data, argc, argv) == -1)
-		return (1);
-	if (pthread_mutex_init(&data->mutex_d, NULL))
-		return (1);
-	if (pthread_mutex_init(&data->mutex_p, NULL))
 		return (1);
 	if (init_mutex(data))
 		return (1);
