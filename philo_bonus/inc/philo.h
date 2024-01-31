@@ -6,7 +6,7 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:31:12 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/26 20:00:56 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/27 03:05:22 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ typedef struct s_philo
 	int				nb_locked_forks;
 }					t_philo;
 
-char				*ft_itoa(int n);
 int					init(t_data *data, int argc, char **argv);
 int					create_philo(t_data *data, int i, int flag);
 void				routine(t_philo *philos);
@@ -60,11 +59,11 @@ int					create_thread_even(t_data *data);
 int					create_thread_odd(t_data *data);
 void				clear_mutex(t_data *data);
 int					ft_atoi(const char *str);
-void				print_action(t_philo *philos, char *str);
+void				print_action(t_philo *philos, char *str, int is_dead);
 int					check_stop(t_philo *philos);
 int					check_args(int argc, char **argv);
 int 				ft_strlen(char *str);
-void				free_and_destroy(t_philo *philos, int flag);
+void				free_and_destroy(t_philo *philos);
 
 // Time functions
 long long			get_cur_time(void);

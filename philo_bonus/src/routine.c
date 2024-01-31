@@ -16,20 +16,20 @@ void	philo_lock_fork(t_philo *philos)
 {
 	if (philos->data->nb_philos == 1)
 	{
-		print_action(philos, "has taken a fork");
-		ft_usleep(philos->data->time_to_die);
+		print_action(philos, "has taken a fork", 0);
+		ft_usleep(philos->data->time_to_die + 10);
 	}
 	sem_wait(philos->data->sem_fork);
 	sem_wait(philos->sem_eat);
 	philos->nb_locked_forks++;
 	sem_post(philos->sem_eat);
-	print_action(philos, "has taken a fork");
+	print_action(philos, "has taken a fork", 0);
 	sem_wait(philos->data->sem_fork);
 	sem_wait(philos->sem_eat);
 	philos->nb_locked_forks++;
 	sem_post(philos->sem_eat);
-	print_action(philos, "has taken a fork");
-	print_action(philos, "is eating");
+	print_action(philos, "has taken a fork", 0);
+	print_action(philos, "is eating", 0);
 }
 
 void	eating(t_philo *philos)
@@ -48,7 +48,6 @@ void	routine(t_philo *philos)
 {
 	pthread_t 	thread;
 
-	print_action(philos, "is thinking");
 	if (philos->flag)
 		ft_usleep(philos->data->time_to_eat);
 	pthread_create(&thread, NULL, &monitor, philos);
@@ -57,9 +56,9 @@ void	routine(t_philo *philos)
 	{
 		philo_lock_fork(philos);
 		eating(philos);
-		print_action(philos, "is sleeping");
+		print_action(philos, "is sleeping", 0);
 		ft_usleep(philos->data->time_to_sleep);
-		print_action(philos, "is thinking");
+		print_action(philos, "is thinking", 0);
 	}
 	exit(1);
 }

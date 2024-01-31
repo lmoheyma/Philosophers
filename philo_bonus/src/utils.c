@@ -6,7 +6,7 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 16:45:29 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/26 21:03:26 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/27 03:06:51 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,13 @@ int	ft_atoi(const char *str)
 	return (res);
 }
 
-void	print_action(t_philo *philos, char *str)
+void	print_action(t_philo *philos, char *str, int is_dead)
 {
 	sem_wait(philos->data->sem_print);
 	printf("%lld %i %s\n", get_cur_time() - philos->data->start, philos->id + 1,
 		str);
-	sem_post(philos->data->sem_print);
+	if (!is_dead)
+		sem_post(philos->data->sem_print);
 }
 
 long long	get_cur_time(void)

@@ -17,7 +17,7 @@ void	is_dead(t_philo *philos)
 	if ((get_cur_time() - philos->last_meal) > philos->data->time_to_die)
 	{
 		sem_post(philos->sem_eat);
-		print_action(philos, "died");
+		print_action(philos, "died", 1);
 		if (philos->nb_locked_forks == 1)
 			sem_post(philos->data->sem_fork);
 		else if (philos->nb_locked_forks == 2)
@@ -25,7 +25,8 @@ void	is_dead(t_philo *philos)
 			sem_post(philos->data->sem_fork);
 			sem_post(philos->data->sem_fork);
 		}
-		free_and_destroy(philos, 1);
+		free_and_destroy(philos);
+		exit(1);
 	}
 }
 
@@ -49,9 +50,10 @@ void	*monitor(void *arg)
 				sem_post(philos->data->sem_fork);
 				sem_post(philos->data->sem_fork);
 			}
-			free_and_destroy(philos, 0);
+			free_and_destroy(philos);
+			exit(0);
 		}
 		sem_post(philos->sem_eat);
-		usleep(1000);
+		usleep(2000);
 	}
 }

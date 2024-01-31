@@ -6,22 +6,24 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:31:58 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/26 18:01:44 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/27 02:33:21 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	free_and_destroy(t_philo *philos, int flag)
+void free_sem(t_data *data)
 {
-	free(philos->data->pid);
-	free(philos->data->philos);
-	sem_destroy(philos->sem_eat);
-	sem_destroy(philos->data->sem_fork);
-	sem_destroy(philos->data->sem_print);
-	if (flag)
-		exit(1);
-	exit(0);
+	free(data->pid);
+	free(data->philos);
+}
+
+void	free_and_destroy(t_philo *philos)
+{
+	free_sem(philos->data);
+	sem_close(philos->sem_eat);
+	sem_close(philos->data->sem_print);
+	sem_close(philos->data->sem_fork);
 }
 
 int	create_thread_even(t_data *data)

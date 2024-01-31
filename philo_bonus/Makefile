@@ -2,15 +2,14 @@ CC = cc
 
 FLAGS = -Wall -Wextra -Werror
 
-INCLUDE = -I inc/philo.h
+INCLUDE = -I /inc/philo.h
 
 SRCS = src/philo.c \
 		src/parsing.c \
 		src/utils.c \
 		src/routine.c \
 		src/monitor.c \
-		src/check_args.c \
-		src/ft_itoa.c
+		src/check_args.c
 
 OBJS = $(SRCS:.c=.o)
 
