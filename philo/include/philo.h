@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:31:12 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/19 02:05:23 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/20 00:27:59 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <sys/time.h>
 # include <unistd.h>
 
+struct s_philo;
+
 typedef struct s_data
 {
 	long int		start;
@@ -29,12 +31,14 @@ typedef struct s_data
 	int				time_to_sleep;
 	int				max_eat;
 	int				nb_forks;
-	int				die;
 	int				stop;
+	int				die;
+	struct s_philo	*philos;
 	pthread_t		monitor;
 	pthread_mutex_t	*mutex;
 	pthread_mutex_t	mutex_p;
 	pthread_mutex_t mutex_d;
+	pthread_mutex_t mutex_stop;
 }					t_data;
 
 typedef struct s_philo
@@ -48,10 +52,10 @@ typedef struct s_philo
 	t_data			*data;
 }					t_philo;
 
-int					init(t_philo **philos, int argc, char **argv);
+int					init(t_data *data, int argc, char **argv);
 
 //Time functions
 long long			get_cur_time(void);
-void				ft_usleep(int ms, t_philo *philos);
+void				ft_usleep(int ms);
 
 #endif
