@@ -6,11 +6,11 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 14:58:20 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/17 05:09:13 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/17 17:43:36 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../include/philo.h"
 
 int	ft_atoi(const char *str)
 {
@@ -39,7 +39,7 @@ int	ft_atoi(const char *str)
 
 int	init_mutex(t_data *data)
 {
-	int				i;
+	int	i;
 
 	i = 0;
 	data->mutex = malloc(sizeof(pthread_mutex_t) * data->nb_forks);
@@ -74,7 +74,7 @@ void	init_philo(t_data *data, t_philo *philos, int i, pthread_mutex_t *fork)
 
 int	init_data(t_data **data, int argc, char **argv)
 {
-	t_data *data_tmp;
+	t_data	*data_tmp;
 
 	data_tmp = malloc(sizeof(t_data));
 	if (!data_tmp)
@@ -88,21 +88,20 @@ int	init_data(t_data **data, int argc, char **argv)
 		data_tmp->max_eat = ft_atoi(argv[5]);
 	else
 		data_tmp->max_eat = -1;
-	if (data_tmp->nb_philos == -1 || data_tmp->time_to_die == -1 || data_tmp->time_to_eat ==
-		-1 || data_tmp->time_to_sleep == -1)
+	if (data_tmp->nb_philos == -1 || data_tmp->time_to_die == -1
+		|| data_tmp->time_to_eat == -1 || data_tmp->time_to_sleep == -1)
 		return (1);
 	data_tmp->die = 0;
 	*data = data_tmp;
 	return (0);
 }
 
-int init(t_philo **philos, int argc, char **argv)
+int	init(t_philo **philos, int argc, char **argv)
 {
-	int	i;
-	t_data *data;
+	int		i;
+	t_data	*data;
 	t_philo	*tmp_philos;
-	
-	//data = NULL;
+
 	if (argc < 5)
 		return (1);
 	i = -1;

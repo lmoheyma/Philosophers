@@ -2,9 +2,9 @@ CC = cc
 
 FLAGS = -Wall -Wextra -Werror
 
-INCLUDE = -I philo.h
+INCLUDE = -I include/philo.h
 
-SRCS = philo.c parsing.c
+SRCS = src/philo.c src/parsing.c src/ft_time.c
 
 OBJS = $(SRCS:.c=.o)
 

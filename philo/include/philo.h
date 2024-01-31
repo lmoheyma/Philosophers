@@ -6,7 +6,7 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:31:12 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/17 05:54:08 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/17 17:40:55 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,9 @@ typedef struct s_philo
 }					t_philo;
 
 int					init(t_philo **philos, int argc, char **argv);
+
+//Time functions
+long long			get_cur_time(void);
+void				ft_usleep(int ms, t_data *data);
 
 #endif
