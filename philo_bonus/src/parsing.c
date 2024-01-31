@@ -6,30 +6,11 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 16:45:01 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/27 02:56:10 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/27 15:51:18 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
-
-char	*sem_name(char *name, int nb)
-{	
-	int	i;
-
-	i = 5;
-	name[0] = '/';
-	name[1] = 's';
-	name[2] = 'e';
-	name[3] = 'm';
-	name[4] = '_';
-	while (nb > 0)
-	{
-		name[i++] = nb % 10 + '0';
-		nb /= 10;
-	}
-	name[i] = '\0';
-	return (name);
-}
 
 void	philo_param(t_data *data, t_philo *philos, int flag)
 {
@@ -42,9 +23,9 @@ void	philo_param(t_data *data, t_philo *philos, int flag)
 
 int	create_philo(t_data *data, int i, int flag)
 {
-	int			pid;
-	char		name[251];
-	t_philo		philos;
+	int		pid;
+	char	name[251];
+	t_philo	philos;
 
 	philos.id = i;
 	philo_param(data, &philos, flag);
@@ -83,38 +64,6 @@ int	init_data(t_data *data, int argc, char **argv)
 	if (!data->pid || !data->philos)
 		return (1);
 	return (0);
-}
-
-void exit_philo(t_data *data)
-{
-	int status;
-	int	i;
-	char	name[251];
-
-	i = -1;
-	while (++i < data->nb_philos)
-	{
-		waitpid(-1, &status, 0);
-		if (status != 0)
-		{
-			i = -1;
-			while (++i < data->nb_philos)
-				kill(data->pid[i], 15);
-			break ;
-		}
-	}
-	i = -1;
-	while (++i < data->nb_philos)
-	{
-		sem_close(data->philos[i]);
-		sem_unlink(sem_name(name, i));
-	}
-	sem_close(data->sem_fork);
-	sem_unlink("/sem_fork");
-	sem_close(data->sem_print);
-	sem_unlink("/sem_print");
-	free(data->pid);
-	free(data->philos);
 }
 
 int	init(t_data *data, int argc, char **argv)

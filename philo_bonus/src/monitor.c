@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/26 17:52:51 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/26 17:52:51 by lmoheyma         ###   ########.fr       */
+/*   Created: 2023/12/27 15:49:58 by lmoheyma          #+#    #+#             */
+/*   Updated: 2023/12/27 15:49:58 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ void	is_dead(t_philo *philos)
 			sem_post(philos->data->sem_fork);
 			sem_post(philos->data->sem_fork);
 		}
-		free_and_destroy(philos);
+		free_and_close(philos);
 		exit(1);
 	}
 }
 
 void	*monitor(void *arg)
 {
-	t_philo *philos;
+	t_philo	*philos;
 
 	philos = (t_philo *)arg;
 	while (1)
@@ -50,7 +50,7 @@ void	*monitor(void *arg)
 				sem_post(philos->data->sem_fork);
 				sem_post(philos->data->sem_fork);
 			}
-			free_and_destroy(philos);
+			free_and_close(philos);
 			exit(0);
 		}
 		sem_post(philos->sem_eat);

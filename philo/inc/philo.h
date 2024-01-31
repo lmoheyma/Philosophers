@@ -6,7 +6,7 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:31:12 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/22 19:36:01 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/27 16:00:09 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,29 @@ typedef struct s_philo
 	t_data			*data;
 }					t_philo;
 
+// Init
 int					init(t_data *data, int argc, char **argv);
 int					create_philo(t_data *data, int i, int flag);
+
+// Philosophers functions
 void				*routine(void *arg);
 void				monitor(t_data *data);
+
+// Start thread
 int					create_thread_even(t_data *data);
 int					create_thread_odd(t_data *data);
-void				clear_mutex(t_data *data);
-int					ft_atoi(const char *str);
+
+// Print
 void				print_action(t_philo *philos, char *str);
+
+// End program & clear
+void				clear_mutex(t_data *data);
 int					check_stop(t_philo *philos);
-int					check_args(int argc, char **argv);
 
 // Time functions
+int					check_args(int argc, char **argv);
 long long			get_cur_time(void);
 void				ft_usleep(int ms);
+int					ft_atoi(const char *str);
 
 #endif

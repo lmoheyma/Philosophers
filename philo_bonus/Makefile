@@ -9,11 +9,12 @@ SRCS = src/philo.c \
 		src/utils.c \
 		src/routine.c \
 		src/monitor.c \
-		src/check_args.c
+		src/check_args.c \
+		src/semaphore.c
 
 OBJS = $(SRCS:.c=.o)
 
-NAME = philo
+NAME = philo_bonus
 
 all: $(NAME)
 

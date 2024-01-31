@@ -6,21 +6,16 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:31:58 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/27 02:33:21 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/27 15:46:45 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void free_sem(t_data *data)
+void	free_and_close(t_philo *philos)
 {
-	free(data->pid);
-	free(data->philos);
-}
-
-void	free_and_destroy(t_philo *philos)
-{
-	free_sem(philos->data);
+	free(philos->data->pid);
+	free(philos->data->philos);
 	sem_close(philos->sem_eat);
 	sem_close(philos->data->sem_print);
 	sem_close(philos->data->sem_fork);

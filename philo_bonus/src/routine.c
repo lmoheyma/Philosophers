@@ -46,7 +46,7 @@ void	eating(t_philo *philos)
 
 void	routine(t_philo *philos)
 {
-	pthread_t 	thread;
+	pthread_t	thread;
 
 	if (philos->flag)
 		ft_usleep(philos->data->time_to_eat);
