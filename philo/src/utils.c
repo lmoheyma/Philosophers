@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/17 17:39:39 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/21 02:37:18 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/21 02:41:29 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int not_digit(char c)
 int	ft_atoi(const char *str)
 {
 	int			i;
-	int			sign;
 	long int	res;
 
 	i = 0;
@@ -29,14 +28,14 @@ int	ft_atoi(const char *str)
 		i++;
 	while (str[i])
 	{
-		if (not_digit(str[i]))
-			return (-1);
+		// if (not_digit(str[i]))
+		// 	return (-1);
 		res = res * 10 + (str[i] - '0');
-		if (res * sign > 2147483647 || res * sign < -2147483648)
+		if (res > 2147483647 || res < -2147483648)
 			return (-1);
 		i++;
 	}
-	return (res * sign);
+	return (res);
 }
 
 void	print_action(t_philo *philos, char *str)
