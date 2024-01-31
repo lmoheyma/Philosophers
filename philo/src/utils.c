@@ -6,11 +6,16 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/17 17:39:39 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/21 02:14:55 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/21 02:37:18 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
+
+int not_digit(char c)
+{
+	return (c < '0' || c > '9');
+}
 
 int	ft_atoi(const char *str)
 {
@@ -19,16 +24,13 @@ int	ft_atoi(const char *str)
 	long int	res;
 
 	i = 0;
-	sign = 1;
 	res = 0;
-	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
-		i++;
-	if (str[i] == '-')
-		sign = -1;
-	if (str[i] == '-' || str[i] == '+')
+	if (str[i] == '+')
 		i++;
 	while (str[i])
 	{
+		if (not_digit(str[i]))
+			return (-1);
 		res = res * 10 + (str[i] - '0');
 		if (res * sign > 2147483647 || res * sign < -2147483648)
 			return (-1);

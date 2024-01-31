@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 14:58:20 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/21 02:14:41 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/21 02:32:41 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,15 @@ int	init_data(t_data *data, int argc, char **argv)
 		return (1);
 	data->thread = malloc(sizeof(pthread_t) * data->nb_philos);
 	data->philos = malloc(sizeof(t_philo *) * data->nb_philos);
+	if (!data->thread || !data->philos)
+		return (1);
 	data->stop = 0;
 	return (0);
 }
 
 int	init(t_data *data, int argc, char **argv)
 {
-	if (argc < 5)
+	if (argc < 5 || argc > 6)
 		return (1);
 	if (init_data(data, argc, argv) == -1)
 		return (1);
