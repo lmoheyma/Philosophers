@@ -6,7 +6,7 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 14:58:20 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/17 18:42:16 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/18 21:21:56 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,9 @@ int	init_data(t_data **data, int argc, char **argv)
 	if (data_tmp->nb_philos == -1 || data_tmp->time_to_die == -1
 		|| data_tmp->time_to_eat == -1 || data_tmp->time_to_sleep == -1)
 		return (1);
+	//pthread_mutex_lock(&data_tmp->mutex_d);
 	data_tmp->die = 0;
+	//pthread_mutex_unlock(&data_tmp->mutex_d);
 	*data = data_tmp;
 	return (0);
 }
@@ -105,6 +107,8 @@ int	init(t_philo **philos, int argc, char **argv)
 		return (1);
 	i = -1;
 	if (init_data(&data, argc, argv) == -1)
+		return (1);
+	if (pthread_mutex_init(&data->mutex_d, NULL))
 		return (1);
 	if (pthread_mutex_init(&data->mutex_p, NULL))
 		return (1);

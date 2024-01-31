@@ -6,7 +6,7 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:31:12 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/17 17:40:55 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/18 20:37:23 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_data
 	pthread_t		monitor;
 	pthread_mutex_t	*mutex;
 	pthread_mutex_t	mutex_p;
+	pthread_mutex_t mutex_d;
 }					t_data;
 
 typedef struct s_philo
@@ -50,6 +51,6 @@ int					init(t_philo **philos, int argc, char **argv);
 
 //Time functions
 long long			get_cur_time(void);
-void				ft_usleep(int ms, t_data *data);
+void				ft_usleep(int ms, t_philo *philos);
 
 #endif
