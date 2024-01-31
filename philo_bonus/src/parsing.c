@@ -6,38 +6,29 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 16:45:01 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/26 20:30:43 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/26 21:02:54 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*sem_name(char *name, int nb)
 {	
-	int		i;
-	int		j;
-	char	*res;
+	int	i;
 
-	if (!s1 || !s2)
-		return (NULL);
-	res = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!res)
-		return (NULL);
-	i = 0;
-	while (s1[i])
+	i = 5;
+	name[0] = '/';
+	name[1] = 's';
+	name[2] = 'e';
+	name[3] = 'm';
+	name[4] = '_';
+	while (nb > 0)
 	{
-		res[i] = s1[i];
-		i++;
+		name[i++] = nb % 10 + '0';
+		nb /= 10;
 	}
-	j = 0;
-	while (s2[j])
-	{
-		res[i] = s2[j];
-		i++;
-		j++;
-	}
-	res[i] = '\0';
-	return (res);
+	name[i] = '\0';
+	return (name);
 }
 
 void	philo_param(t_data *data, t_philo *philos, int flag)
@@ -52,11 +43,12 @@ void	philo_param(t_data *data, t_philo *philos, int flag)
 int	create_philo(t_data *data, int i, int flag)
 {
 	int			pid;
+	char		name[251];
 	t_philo		philos;
 
 	philos.id = i;
 	philo_param(data, &philos, flag);
-	philos.sem_eat = sem_open(ft_strjoin("/sem_eat", ft_itoa(i)), O_CREAT, 0644, 1);
+	philos.sem_eat = sem_open(sem_name(name, i), O_CREAT, 0644, 1);
 	pid = fork();
 	if (pid == -1)
 		return (1);
@@ -96,6 +88,7 @@ void exit_philo(t_data *data)
 {
 	int status;
 	int	i;
+	char	name[251];
 
 	i = -1;
 	while (++i < data->nb_philos)
@@ -111,9 +104,14 @@ void exit_philo(t_data *data)
 	}
 	i = -1;
 	while (++i < data->nb_philos)
+	{
 		sem_close(data->philos[i]);
+		sem_unlink(sem_name(name, i));
+	}
 	sem_close(data->sem_fork);
 	sem_close(data->sem_print);
+	sem_unlink("/sem_print");
+	sem_unlink("/sem_fork");
 	free(data->pid);
 	free(data->philos);
 }
