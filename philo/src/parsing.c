@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/14 14:58:20 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/21 02:32:41 by marvin           ###   ########.fr       */
+/*   Created: 2023/12/22 16:45:01 by lmoheyma          #+#    #+#             */
+/*   Updated: 2023/12/22 19:36:38 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	init_mutex(t_data *data)
 		return (1);
 	return (0);
 }
+
 void	philo_param(t_data *data, t_philo *philos, int flag)
 {
 	philos->count_eat = 0;
@@ -41,7 +42,7 @@ void	philo_param(t_data *data, t_philo *philos, int flag)
 
 int	create_philo(t_data *data, int i, int flag)
 {
-	pthread_t 	thread;
+	pthread_t	thread;
 	t_philo		*philos;
 
 	philos = malloc(sizeof(t_philo));
@@ -68,8 +69,8 @@ int	init_data(t_data *data, int argc, char **argv)
 		data->max_eat = ft_atoi(argv[5]);
 	else
 		data->max_eat = -1;
-	if (data->nb_philos == -1 || data->time_to_die == -1
-		|| data->time_to_eat == -1 || data->time_to_sleep == -1)
+	if (data->nb_philos == -1 || data->time_to_die == -1 || data->time_to_eat
+		== -1 || data->time_to_sleep == -1)
 		return (1);
 	data->thread = malloc(sizeof(pthread_t) * data->nb_philos);
 	data->philos = malloc(sizeof(t_philo *) * data->nb_philos);
@@ -81,8 +82,6 @@ int	init_data(t_data *data, int argc, char **argv)
 
 int	init(t_data *data, int argc, char **argv)
 {
-	if (argc < 5 || argc > 6)
-		return (1);
 	if (init_data(data, argc, argv) == -1)
 		return (1);
 	if (init_mutex(data))

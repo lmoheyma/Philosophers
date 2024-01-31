@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:31:58 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/21 02:14:45 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/22 19:33:22 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,15 @@ void	clear_mutex(t_data *data)
 	pthread_mutex_destroy(&data->mutex_stop);
 	while (++i < data->nb_forks)
 		pthread_mutex_destroy(&data->mutex[i]);
-	free(data->philos);
+	i = -1;
+	while (++i < data->nb_philos)
+		free(data->philos[i]);
 	free(data->mutex);
+	free(data->thread);
+	free(data->philos);
 }
 
-int create_thread_even(t_data *data)
+int	create_thread_even(t_data *data)
 {
 	int	i;
 
@@ -42,7 +46,7 @@ int create_thread_even(t_data *data)
 	return (0);
 }
 
-int create_thread_odd(t_data *data)
+int	create_thread_odd(t_data *data)
 {
 	int	i;
 
@@ -60,6 +64,10 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 
+	if (argc < 5 || argc > 6)
+		return (1);
+	if (check_args(argc, argv))
+		return (1);
 	if (init(&data, argc, argv))
 		return (1);
 	return (0);

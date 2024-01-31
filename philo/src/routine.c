@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/21 02:08:14 by marvin            #+#    #+#             */
-/*   Updated: 2023/12/21 02:08:14 by marvin           ###   ########.fr       */
+/*   Created: 2023/12/22 19:33:33 by lmoheyma          #+#    #+#             */
+/*   Updated: 2023/12/22 19:33:33 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	philo_lock_fork(t_philo *philos, int left_fork, int right_fork)
 	return (0);
 }
 
-int eating(t_philo *philos, int left_fork, int right_fork)
+int	eating(t_philo *philos, int left_fork, int right_fork)
 {
 	ft_usleep(philos->data->time_to_eat);
 	if (check_stop(philos))
@@ -59,10 +59,10 @@ int eating(t_philo *philos, int left_fork, int right_fork)
 	return (0);
 }
 
-void philos_fork(t_philo *philos, int *left_fork, int *right_fork)
+void	philos_fork(t_philo *philos, int *left_fork, int *right_fork)
 {
 	int	tmp;
-	
+
 	*left_fork = philos->id;
 	*right_fork = philos->id - 1;
 	if (*right_fork == -1)
@@ -77,9 +77,9 @@ void philos_fork(t_philo *philos, int *left_fork, int *right_fork)
 
 void	*routine(void *arg)
 {
-	t_philo		*philos;
-	int			left_fork;
-	int			right_fork;
+	t_philo	*philos;
+	int		left_fork;
+	int		right_fork;
 
 	philos = (t_philo *)arg;
 	philos_fork(philos, &left_fork, &right_fork);

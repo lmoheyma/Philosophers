@@ -8,7 +8,8 @@ SRCS = src/philo.c \
 		src/parsing.c \
 		src/utils.c \
 		src/routine.c \
-		src/monitor.c
+		src/monitor.c \
+		src/check_args.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -17,7 +18,7 @@ NAME = philo
 all: $(NAME)
 
 %.o : %.c
-	$(CC) -c $< -o $@
+	$(CC) $(FLAGS) $(INCLUDE) -c $< -o $@
 
 $(NAME) : $(OBJS)
 	$(CC) $(FLAGS) $(OBJS) -o $(NAME) $(INCLUDE)

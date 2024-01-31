@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/21 02:06:16 by marvin            #+#    #+#             */
-/*   Updated: 2023/12/21 02:06:16 by marvin           ###   ########.fr       */
+/*   Created: 2023/12/22 19:33:41 by lmoheyma          #+#    #+#             */
+/*   Updated: 2023/12/22 19:33:41 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	check_stop(t_philo *philos)
 	return (res);
 }
 
-int is_all_eat(t_philo *philos, int all_eat)
+int	is_all_eat(t_philo *philos, int all_eat)
 {
 	if (philos->data->max_eat != -1 && all_eat == 1)
 	{
@@ -34,7 +34,7 @@ int is_all_eat(t_philo *philos, int all_eat)
 	return (0);
 }
 
-int is_dead(t_data *data, t_philo *philos)
+int	is_dead(t_data *data, t_philo *philos)
 {
 	if ((get_cur_time() - philos->last_meal) > data->time_to_die)
 	{
