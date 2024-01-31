@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:31:12 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/20 00:27:59 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/21 02:13:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,27 +32,33 @@ typedef struct s_data
 	int				max_eat;
 	int				nb_forks;
 	int				stop;
-	int				die;
-	struct s_philo	*philos;
-	pthread_t		monitor;
+	pthread_t		*thread;
+	struct s_philo	**philos;
 	pthread_mutex_t	*mutex;
 	pthread_mutex_t	mutex_p;
-	pthread_mutex_t mutex_d;
 	pthread_mutex_t mutex_stop;
 }					t_data;
 
 typedef struct s_philo
 {
 	int				id;
+	int				flag;
 	int				count_eat;
 	long int		last_meal;
-	pthread_t		thread_p;
-	int				left_fork;
-	int				right_fork;
+	pthread_mutex_t mutex_eat;
 	t_data			*data;
 }					t_philo;
 
 int					init(t_data *data, int argc, char **argv);
+int					create_philo(t_data *data, int i, int flag);
+void				*routine(void *arg);
+void				monitor(t_data *data);
+int 				create_thread_even(t_data *data);
+int 				create_thread_odd(t_data *data);
+void				clear_mutex(t_data *data);
+int					ft_atoi(const char *str);
+void				print_action(t_philo *philos, char *str);
+int					check_stop(t_philo *philos);
 
 //Time functions
 long long			get_cur_time(void);

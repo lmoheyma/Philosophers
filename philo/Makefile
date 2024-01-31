@@ -1,10 +1,14 @@
 CC = cc
 
-FLAGS = -Wall -Wextra -Werror -g 
+FLAGS = -Wall -Wextra -Werror
 
-INCLUDE = -I include/philo.h
+INCLUDE = -I inc/philo.h
 
-SRCS = src/philo.c src/parsing.c src/ft_time.c
+SRCS = src/philo.c \
+		src/parsing.c \
+		src/utils.c \
+		src/routine.c \
+		src/monitor.c
 
 OBJS = $(SRCS:.c=.o)
 
