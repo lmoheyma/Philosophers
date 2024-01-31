@@ -6,7 +6,7 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:31:58 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/16 18:59:43 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/16 20:19:32 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	*routine(void *arg)
 	t_philo *philos;
 
 	philos = arg;
-	while (philos->data->die)
+	while (!philos->data->die)
 	{
 		pthread_mutex_lock(philos->left_fork);
 		print_action(philos, "as taken a fork", philos->id);
@@ -54,10 +54,30 @@ void	*routine(void *arg)
 	}
 }
 
-int	monitor(t_philo *philos)
+int	monitor(void *arg)
 {
-	
+	int	i;
+	t_philo *philos;
+
+	philos = arg;
+	i = 0;
+	while (!philos->data->die)
+	{
+		while (i < philos->data->nb_philos)
+		{
+			if (get_cur_time() - philos->data->last_meal > philos->data->time_to_die)
+			{
+				print_action(philos, "died", i);
+				philos->data->die = 1;
+				break ;
+			}
+		}
+		if (philos->data->max_eat != -1 && philos->data->count_eat > philos->data->max_eat)
+			philos->data->die = 1;
+	}
+	return (0);
 }
+
 int	thread_crea_and_destroy(int i)
 {
 
@@ -79,7 +99,12 @@ int main(int argc, char *argv)
 			return (1);
 		if (pthread_detach(&(philos[i]).thread_p))
 			return (1);
+		i++;
 	}
+	if (pthread_create(philos->data->monitor, NULL, &monitor, philos))
+		return (1);
+	if (pthread_join(philos->data->monitor, NULL))
+		return (1);
 	i = 0;
 	while (i < data->nb_forks)
 	{

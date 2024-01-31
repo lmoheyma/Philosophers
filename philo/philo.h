@@ -6,7 +6,7 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:31:12 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/16 18:52:06 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/16 20:20:52 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,12 @@ typedef struct s_data
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
+	int				max_eat;
 	int				last_meal;
 	int				nb_forks;
 	int				count_eat;
 	int				*die;
+	pthread_t		monitor;
 	pthread_mutex_t	*mutex;
 	pthread_mutex_t	mutex_p;
 }					t_data;
