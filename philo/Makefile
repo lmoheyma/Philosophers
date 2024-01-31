@@ -1,6 +1,6 @@
 CC = cc
 
-FLAGS = -Wall -Wextra -Werror -fsanitize=thread -g 
+FLAGS = -Wall -Wextra -Werror -g 
 
 INCLUDE = -I include/philo.h
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:31:58 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/17 21:02:27 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/18 01:34:29 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,30 @@ void	*routine(void *arg)
 	philos = arg;
 	while (!philos->data->die)
 	{
-		pthread_mutex_lock(philos->left_fork);
+		if (philos->id % 2 == 0)
+			pthread_mutex_lock(philos->left_fork);
+		else
+			pthread_mutex_lock(philos->right_fork);
 		print_action(philos, "has taken a fork");
-		pthread_mutex_lock(philos->right_fork);
+		if (philos->id % 2 == 0)
+			pthread_mutex_lock(philos->right_fork);
+		else
+			pthread_mutex_lock(philos->left_fork);
 		print_action(philos, "has taken a fork");
 		print_action(philos, "is eating");
 		ft_usleep(philos->data->time_to_eat, philos->data);
 		philos->last_meal = get_cur_time();
-		pthread_mutex_unlock(philos->right_fork);
-		pthread_mutex_unlock(philos->left_fork);
-		if (!philos->data->die)
-			philos->count_eat++;
+		if (philos->id % 2 == 0)
+		{
+			pthread_mutex_unlock(philos->left_fork);
+			pthread_mutex_unlock(philos->right_fork);
+		}
+		else
+		{
+			pthread_mutex_unlock(philos->right_fork);
+			pthread_mutex_unlock(philos->left_fork);
+		}
+		philos->count_eat++;
 		print_action(philos, "is sleeping");
 		ft_usleep(philos->data->time_to_sleep, philos->data);
 		print_action(philos, "is thinking");
@@ -93,25 +106,35 @@ int	main(int argc, char **argv)
 	philos->data->start = get_cur_time();
 	while (i < philos->data->nb_philos)
 	{
-		(philos + i)->last_meal = get_cur_time();
-		if (pthread_create(&(philos + i)->thread_p, NULL, &routine, philos + i))
-			return (1);
-		pthread_detach((philos + i)->thread_p);
-		usleep(50);
+		if (philos->id % 2 == 0)
+		{
+			(philos + i)->last_meal = get_cur_time();
+			if (pthread_create(&(philos + i)->thread_p, NULL, &routine, philos + i))
+				return (1);
+			//pthread_detach((philos + i)->thread_p);
+		}
 		i++;
 	}
-	// i = 1;
-	// while (i < philos->data->nb_philos)
-	// {
-	// 	(philos + i)->last_meal = get_cur_time();
-	// 	if (pthread_create(&(philos + i)->thread_p, NULL, &routine, philos + i))
-	// 		return (1);
-	// 	pthread_detach((philos + i)->thread_p);
-	// 	usleep(50);
-	// 	i += 2;
-	// }
+	i = 0;
+	while (i < philos->data->nb_philos)
+	{
+		if (philos->id % 2 == 1)
+		{
+			(philos + i)->last_meal = get_cur_time();
+			if (pthread_create(&(philos + i)->thread_p, NULL, &routine, philos + i))
+				return (1);
+			//pthread_detach((philos + i)->thread_p);
+		}
+		i++;
+	}
 	if (pthread_create(&philos->data->monitor, NULL, &monitor, philos))
 		return (1);
+	i = 0;
+	while (i < philos->data->nb_philos)
+	{
+		pthread_join((philos + i)->thread_p, NULL);
+		i++;
+	}
 	if (pthread_join(philos->data->monitor, NULL))
 		return (1);
 	clear_mutex(philos);
