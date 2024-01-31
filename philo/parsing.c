@@ -6,7 +6,7 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 14:58:20 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/16 18:26:08 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/17 05:09:13 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,15 @@ int	ft_atoi(const char *str)
 
 int	init_mutex(t_data *data)
 {
-	pthread_mutex_t	*mutex;
 	int				i;
 
 	i = 0;
-	mutex = malloc(sizeof(pthread_mutex_t) * data->nb_forks);
-	if (!mutex)
+	data->mutex = malloc(sizeof(pthread_mutex_t) * data->nb_forks);
+	if (!data->mutex)
 		return (1);
 	while (i < data->nb_forks)
 	{
-		if (pthread_mutex_init(mutex + i, NULL))
+		if (pthread_mutex_init(data->mutex + i, NULL))
 			return (1);
 		i++;
 	}
@@ -58,56 +57,68 @@ int	init_mutex(t_data *data)
 void	init_philo(t_data *data, t_philo *philos, int i, pthread_mutex_t *fork)
 {
 	philos->id = i + 1;
-	if (i == 1)
+	philos->count_eat = 0;
+	philos->last_meal = 0;
+	philos->data = data;
+	if (i == 0)
 	{
-		philos->left_fork = &fork[data->nb_forks];
-		philos->right_fork = &fork[i];
+		philos->left_fork = fork + data->nb_forks - 1;
+		philos->right_fork = fork + i;
 	}
 	else
 	{
-		philos->left_fork = &fork[i - 1];
-		philos->right_fork = &fork[i];
+		philos->left_fork = fork + i - 1;
+		philos->right_fork = fork + i;
 	}
 }
 
-int	init_data(t_data *data, int argc, char **argv)
+int	init_data(t_data **data, int argc, char **argv)
 {
-	data = malloc(sizeof(t_data));
-	if (!data)
+	t_data *data_tmp;
+
+	data_tmp = malloc(sizeof(t_data));
+	if (!data_tmp)
 		return (1);
-	data->nb_philos = ft_atoi(argv[1]);
-	data->time_to_die = ft_atoi(argv[2]);
-	data->time_to_eat = ft_atoi(argv[3]);
-	data->time_to_sleep = ft_atoi(argv[4]);
-	data->nb_forks = ft_atoi(argv[1]);
-	if (argc == 5)
-		data->count_eat = ft_atoi(argv[5]);
+	data_tmp->nb_philos = ft_atoi(argv[1]);
+	data_tmp->time_to_die = ft_atoi(argv[2]);
+	data_tmp->time_to_eat = ft_atoi(argv[3]);
+	data_tmp->time_to_sleep = ft_atoi(argv[4]);
+	data_tmp->nb_forks = data_tmp->nb_philos;
+	if (argc == 6)
+		data_tmp->max_eat = ft_atoi(argv[5]);
 	else
-		data->count_eat = -1;
-	if (data->nb_philos == -1 || data->time_to_die == -1 || data->time_to_eat ==
-		-1 || data->time_to_sleep == -1)
+		data_tmp->max_eat = -1;
+	if (data_tmp->nb_philos == -1 || data_tmp->time_to_die == -1 || data_tmp->time_to_eat ==
+		-1 || data_tmp->time_to_sleep == -1)
 		return (1);
-	data->die = 0;
+	data_tmp->die = 0;
+	*data = data_tmp;
 	return (0);
 }
 
-int init(t_data *data, t_philo *philos, int argc, char **argv)
+int init(t_philo **philos, int argc, char **argv)
 {
 	int	i;
-
-	i = 1;
-	data = init_data(data, argc, argv);
-	if (data)
+	t_data *data;
+	t_philo	*tmp_philos;
+	
+	//data = NULL;
+	if (argc < 5)
 		return (1);
-	if (pthread_init_t(philos->data->mutex_p, NULL))
+	i = -1;
+	if (init_data(&data, argc, argv) == -1)
+		return (1);
+	if (pthread_mutex_init(&data->mutex_p, NULL))
 		return (1);
 	if (init_mutex(data))
 		return (1);
-	while (i <= data->nb_philos)
+	tmp_philos = malloc(sizeof(t_philo) * data->nb_philos);
+	if (!tmp_philos)
+		return (1);
+	while (++i < data->nb_philos)
 	{
-		init_philo(data, philos, i, data->mutex);
-		i++;
+		init_philo(data, tmp_philos + i, i, data->mutex);
 	}
+	*philos = tmp_philos;
 	return (0);
 }
-

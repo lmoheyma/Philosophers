@@ -6,7 +6,7 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:31:12 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/16 20:20:52 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/17 05:54:08 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,14 @@
 
 typedef struct s_data
 {
-	int				start;
+	long int		start;
 	int				nb_philos;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				max_eat;
-	int				last_meal;
 	int				nb_forks;
-	int				count_eat;
-	int				*die;
+	int				die;
 	pthread_t		monitor;
 	pthread_mutex_t	*mutex;
 	pthread_mutex_t	mutex_p;
@@ -40,10 +38,14 @@ typedef struct s_data
 typedef struct s_philo
 {
 	int				id;
+	int				count_eat;
+	long int		last_meal;
 	pthread_t		thread_p;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	t_data			*data;
 }					t_philo;
+
+int					init(t_philo **philos, int argc, char **argv);
 
 #endif

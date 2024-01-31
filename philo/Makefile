@@ -4,7 +4,7 @@ FLAGS = -Wall -Wextra -Werror
 
 INCLUDE = -I philo.h
 
-SRCS = philo.c parsing.c 
+SRCS = philo.c parsing.c
 
 OBJS = $(SRCS:.c=.o)
 
