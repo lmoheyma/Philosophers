@@ -24,7 +24,7 @@ void	philo_lock_fork(t_philo *philos)
 	philos->nb_locked_forks++;
 	sem_post(philos->sem_eat);
 	print_action(philos, "has taken a fork");
-	//sem_wait(philos->data->sem_fork);
+	sem_wait(philos->data->sem_fork);
 	sem_wait(philos->sem_eat);
 	philos->nb_locked_forks++;
 	sem_post(philos->sem_eat);
@@ -61,4 +61,5 @@ void	routine(t_philo *philos)
 		ft_usleep(philos->data->time_to_sleep);
 		print_action(philos, "is thinking");
 	}
+	exit(1);
 }

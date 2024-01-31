@@ -6,7 +6,7 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 16:45:01 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/26 18:54:17 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/26 20:02:27 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,9 @@ int	create_philo(t_data *data, int i, int flag)
 	if (pid == -1)
 		return (1);
 	if (pid == 0)
+	{
 		routine(&philos);
+	}
 	else
 	{
 		data->pid[i] = pid;
@@ -94,6 +96,30 @@ int	init_data(t_data *data, int argc, char **argv)
 	return (0);
 }
 
+void exit_philo(t_data *data)
+{
+	int status;
+	int	i;
+
+	i = -1;
+	while (++i < data->nb_philos)
+	{
+		waitpid(-1, &status, 0);
+		if (status != 0)
+		{
+			i = -1;
+			while (++i < data->nb_philos)
+				kill(data->pid[i], 15);
+			break ;
+		}
+	}
+	i = -1;
+	while (++i < data->nb_philos)
+		sem_close(data->philos[i]);
+	sem_close(data->sem_fork);
+	sem_close(data->sem_print);
+}
+
 int	init(t_data *data, int argc, char **argv)
 {
 	if (init_data(data, argc, argv) == -1)
@@ -105,6 +131,6 @@ int	init(t_data *data, int argc, char **argv)
 		return (1);
 	if (create_thread_odd(data))
 		return (1);
-	//clear(data);
+	exit_philo(data);
 	return (0);
 }

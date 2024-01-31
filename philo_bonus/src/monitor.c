@@ -37,7 +37,7 @@ void	*monitor(void *arg)
 	while (1)
 	{
 		sem_wait(philos->sem_eat);
-		is_dead(philos);
+		//is_dead(philos);
 		if (philos->data->max_eat != -1
 			&& philos->count_eat >= philos->data->max_eat)
 		{
