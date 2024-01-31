@@ -6,7 +6,7 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:31:58 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/17 17:43:24 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/17 21:02:27 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,10 @@ void	*routine(void *arg)
 		print_action(philos, "is eating");
 		ft_usleep(philos->data->time_to_eat, philos->data);
 		philos->last_meal = get_cur_time();
-		pthread_mutex_unlock(philos->left_fork);
 		pthread_mutex_unlock(philos->right_fork);
-		philos->count_eat++;
+		pthread_mutex_unlock(philos->left_fork);
+		if (!philos->data->die)
+			philos->count_eat++;
 		print_action(philos, "is sleeping");
 		ft_usleep(philos->data->time_to_sleep, philos->data);
 		print_action(philos, "is thinking");
@@ -71,20 +72,14 @@ void	*monitor(void *arg)
 	return (0);
 }
 
-int	clear_mutex(t_philo *philos)
+void	clear_mutex(t_philo *philos)
 {
 	int	i;
 
-	i = 0;
-	while (i < philos->data->nb_forks)
-	{
-		if (pthread_mutex_destroy(&philos->data->mutex[i]))
-			return (1);
-		i++;
-	}
-	if (pthread_mutex_destroy(&philos->data->mutex_p))
-		return (1);
-	return (0);
+	i = -1;
+	while (++i < philos->data->nb_forks)
+		pthread_mutex_destroy(&philos->data->mutex[i]);
+	pthread_mutex_destroy(&philos->data->mutex_p);
 }
 
 int	main(int argc, char **argv)
@@ -92,23 +87,33 @@ int	main(int argc, char **argv)
 	t_philo	*philos;
 	int		i;
 
-	i = -1;
+	i = 0;
 	if (init(&philos, argc, argv))
 		return (1);
 	philos->data->start = get_cur_time();
-	while (++i < philos->data->nb_philos)
+	while (i < philos->data->nb_philos)
 	{
 		(philos + i)->last_meal = get_cur_time();
 		if (pthread_create(&(philos + i)->thread_p, NULL, &routine, philos + i))
 			return (1);
 		pthread_detach((philos + i)->thread_p);
-		usleep(2000);
+		usleep(50);
+		i++;
 	}
+	// i = 1;
+	// while (i < philos->data->nb_philos)
+	// {
+	// 	(philos + i)->last_meal = get_cur_time();
+	// 	if (pthread_create(&(philos + i)->thread_p, NULL, &routine, philos + i))
+	// 		return (1);
+	// 	pthread_detach((philos + i)->thread_p);
+	// 	usleep(50);
+	// 	i += 2;
+	// }
 	if (pthread_create(&philos->data->monitor, NULL, &monitor, philos))
 		return (1);
 	if (pthread_join(philos->data->monitor, NULL))
 		return (1);
-	if (clear_mutex(philos))
-		return (1);
+	clear_mutex(philos);
 	return (0);
 }

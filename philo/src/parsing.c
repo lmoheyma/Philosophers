@@ -6,7 +6,7 @@
 /*   By: lmoheyma <lmoheyma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 14:58:20 by lmoheyma          #+#    #+#             */
-/*   Updated: 2023/12/17 17:43:36 by lmoheyma         ###   ########.fr       */
+/*   Updated: 2023/12/17 18:42:16 by lmoheyma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,14 @@ int	init_mutex(t_data *data)
 {
 	int	i;
 
-	i = 0;
+	i = -1;
 	data->mutex = malloc(sizeof(pthread_mutex_t) * data->nb_forks);
 	if (!data->mutex)
 		return (1);
-	while (i < data->nb_forks)
+	while (++i < data->nb_forks)
 	{
 		if (pthread_mutex_init(data->mutex + i, NULL))
 			return (1);
-		i++;
 	}
 	return (0);
 }
