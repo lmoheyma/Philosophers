@@ -24,7 +24,7 @@ There is two versions :
 - **Mandatory Part :**
     - `make -C philo/ && cd philo/`
 - **Bonus Part :**
-    - `make -C philo/ && cd philo_bonus/`
+    - `make -C philo_bonus/ && cd philo_bonus/`
 
 Then for both part the arguments are the following ones :
 - **number_of_philosophers:** The number of philosophers and also the number of forks.
